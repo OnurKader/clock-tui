@@ -1,5 +1,7 @@
 #include "Term.hpp"
 
+#include "Font.hpp"
+
 #include <csignal>
 #include <ctime>
 #include <stdexcept>
@@ -108,7 +110,7 @@ void Term::update()
 void Term::draw()
 {
 	// TODO: Draw the time
-	fmt::print("\033[{};{}H", m_height / 2 + 1, m_width / 2 - 4);
+	fmt::print("\033[{};{}H", m_height / 2, m_width / 2 - 4);
 	fmt::print("\033[1;32m{}\033[1;33m{}:\033[1;34m{}\033[1;35m{}:\033[1;31m{}\033[1;36m{}\033[m\n",
 			   m_hour.first,
 			   m_hour.second,

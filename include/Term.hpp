@@ -1,3 +1,5 @@
+#pragma once
+
 #include <fmt/core.hpp>
 #include <termio.h>
 
