@@ -1,6 +1,7 @@
 #include "Term.hpp"
 
 #include <csignal>
+#include <ctime>
 #include <stdexcept>
 #include <unistd.h>
 
@@ -77,6 +78,11 @@ void Term::update_size()
 	m_height = ws.ws_row;
 }
 
+inline std::pair<std::uint8_t, std::uint8_t> get_digits_of_time_unit(int unit)
+{
+	return {(unit / 10) % 10, unit % 10};
+}
+
 void Term::update()
 {
 	if(m_resized)
@@ -85,10 +91,29 @@ void Term::update()
 		m_resized = false;
 	}
 
-	// TODO: Update time
+	if(m_interrupted)
+	{
+		this->~Term();
+		std::exit(0);
+	}
+
+	const std::time_t t = std::time(nullptr);
+	const std::tm now = *std::localtime(&t);
+
+	m_hour = get_digits_of_time_unit(now.tm_hour);
+	m_minute = get_digits_of_time_unit(now.tm_min);
+	m_second = get_digits_of_time_unit(now.tm_sec);
 }
 
 void Term::draw()
 {
 	// TODO: Draw the time
+	fmt::print("\033[{};{}H", m_height / 2 + 1, m_width / 2 - 4);
+	fmt::print("\033[1;32m{}\033[1;33m{}:\033[1;34m{}\033[1;35m{}:\033[1;31m{}\033[1;36m{}\033[m\n",
+			   m_hour.first,
+			   m_hour.second,
+			   m_minute.first,
+			   m_minute.second,
+			   m_second.first,
+			   m_second.second);
 }

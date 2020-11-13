@@ -16,15 +16,10 @@ public:
 
 	void update_size();
 
-	static void handle_interrupt(int)
-	{
-		alt_screen(false);
-		show_cursor(true);
-	}
+	static void handle_interrupt(int) { m_interrupted = true; }
 
 	static void handle_resize(int)
 	{
-		// update_size();
 		m_resized = true;
 		cls();
 	}
@@ -39,7 +34,12 @@ private:
 	struct termios m_current_attrs;
 
 	static inline bool m_resized {false};
+	static inline bool m_interrupted {false};
 
 	std::uint16_t m_width {80};
 	std::uint16_t m_height {40};
+
+	std::pair<std::uint8_t, std::uint8_t> m_hour {0, 0};
+	std::pair<std::uint8_t, std::uint8_t> m_minute {0, 0};
+	std::pair<std::uint8_t, std::uint8_t> m_second {0, 0};
 };
