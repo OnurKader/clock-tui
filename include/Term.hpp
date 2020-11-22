@@ -6,7 +6,9 @@
 class Term
 {
 public:
-	Term();
+	Term(std::uint8_t color);
+	Term(const Term&) = delete;
+	Term(Term&&) = delete;
 	~Term();
 
 	void flush();
@@ -28,14 +30,24 @@ public:
 
 	static void cls() { fmt::print("\033[H\033[2J\033[3J"); }
 
+	static void move_up(std::size_t count = 1) { fmt::print("\033[{}A", count); }
+	static void move_down(std::size_t count = 1) { fmt::print("\033[{}B", count); }
+	static void move_right(std::size_t count = 1) { fmt::print("\033[{}C", count); }
+	static void move_left(std::size_t count = 1) { fmt::print("\033[{}D", count); }
+
+	static void goto_xy(std::size_t x, std::size_t y) { fmt::print("\033[{1};{0}H", x, y); }
+	static void goto_rc(std::size_t r, std::size_t c) { fmt::print("\033[{};{}H", r, c); }
+
 	void update();
 	void draw();
 
-private:
 	using time_unit = std::pair<std::uint8_t, std::uint8_t>;
 
-	void draw_nth_row(time_unit id, std::size_t n);
-	void draw_nth_row(std::size_t n);
+private:
+	void print_row(std::string_view row);
+	void print_digit_on_its_own(std::uint8_t id);
+	void print_unit_of_time(Term::time_unit unit);
+	void draw_colon();
 
 private:
 	struct termios m_original_attrs;
@@ -50,4 +62,6 @@ private:
 	time_unit m_hour {0, 0};
 	time_unit m_minute {0, 0};
 	time_unit m_second {0, 0};
+
+	std::uint8_t m_color {45};
 };
