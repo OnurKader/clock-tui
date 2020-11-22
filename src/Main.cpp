@@ -7,7 +7,6 @@
 int main()
 {
 	Term term;
-	fmt::print("TIME!\n");
 
 	while(true)
 	{

@@ -32,6 +32,12 @@ public:
 	void draw();
 
 private:
+	using time_unit = std::pair<std::uint8_t, std::uint8_t>;
+
+	void draw_nth_row(time_unit id, std::size_t n);
+	void draw_nth_row(std::size_t n);
+
+private:
 	struct termios m_original_attrs;
 	struct termios m_current_attrs;
 
@@ -41,7 +47,7 @@ private:
 	std::uint16_t m_width {80};
 	std::uint16_t m_height {40};
 
-	std::pair<std::uint8_t, std::uint8_t> m_hour {0, 0};
-	std::pair<std::uint8_t, std::uint8_t> m_minute {0, 0};
-	std::pair<std::uint8_t, std::uint8_t> m_second {0, 0};
+	time_unit m_hour {0, 0};
+	time_unit m_minute {0, 0};
+	time_unit m_second {0, 0};
 };
